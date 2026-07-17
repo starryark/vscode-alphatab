@@ -27,7 +27,8 @@ function getSoundDirUri(context: vscode.ExtensionContext, panel?: vscode.Webview
     return panel?.webview.asWebviewUri(vscode.Uri.file(soundFilePath)).toString();
 }
 
-export function openAlphatabPreview(context: vscode.ExtensionContext, uri?: vscode.Uri) {    
+export function openAlphatabPreview(context: vscode.ExtensionContext, uri?: vscode.Uri) {
+    const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri;
     const panel = vscode.window.createWebviewPanel(
         'alphatab',
         'Alphatab',
@@ -49,37 +50,74 @@ export function openAlphatabPreview(context: vscode.ExtensionContext, uri?: vsco
     const setting = {
         staveProfile: 'default',
         core: {
-            tex: true
+            tex: true,
+            // webview 的 worker 无法加载 vscode-resource 脚本，渲染放主线程
+            useWorkers: false
         },
-        notation: { 
+        notation: {
             rhythmMode: 'showwithbars',
         },
         player: {
             enablePlayer: true,
-            soundFont: ''
+            soundFont: '',
+            // 1 = WebAudioScriptProcessor，避开 AudioWorklet 加载失败
+            outputMode: 1
         }
     };
     const sf2Dir = getSoundDirUri(context, panel);
-    if (uri) {
-        const alphatex = fs.readFileSync(uri.fsPath, 'utf-8');        
-        debouncePostMessage(panel, { alphatex, setting, sf2Dir });
+
+    let debouncePostMessageHandler: NodeJS.Timeout | undefined = undefined;
+    function debouncePostMessage(message: any) {
+        if (debouncePostMessageHandler !== undefined) {
+            clearTimeout(debouncePostMessageHandler);
+        }
+        debouncePostMessageHandler = setTimeout(() => {
+            debouncePostMessageHandler = undefined;
+            panel.webview.postMessage(message);
+        }, 100);
     }
 
-    vscode.workspace.onDidChangeTextDocument(e => {
-        if (e.contentChanges.length > 0) {
-            const document = e.document;
-            const alphatex = document.getText();
-            debouncePostMessage(panel, { alphatex, setting, sf2Dir });
+    function readTargetAlphatex(): string | undefined {
+        if (!targetUri) {
+            return undefined;
+        }
+        const document = vscode.workspace.textDocuments.find(d => d.uri.toString() === targetUri.toString());
+        if (document) {
+            return document.getText();
+        }
+        try {
+            return fs.readFileSync(targetUri.fsPath, 'utf-8');
+        } catch {
+            return undefined;
+        }
+    }
+
+    // 等 webview 加载完 alphaTab.min.js 并发来 ready 后再发送初始内容，
+    // 否则消息会在监听器注册之前被丢弃，导致预览一片空白
+    const readyListener = panel.webview.onDidReceiveMessage(message => {
+        if (message && message.type === 'ready') {
+            const alphatex = readTargetAlphatex();
+            if (alphatex !== undefined) {
+                panel.webview.postMessage({ alphatex, setting, sf2Dir });
+            }
         }
     });
-}
 
-let debouncePostMessageHandler: NodeJS.Timeout | undefined = undefined;
-function debouncePostMessage(panel: vscode.WebviewPanel, message: any) {
-    if (debouncePostMessageHandler !== undefined) {        
-        clearTimeout(debouncePostMessageHandler);
-    }
-    debouncePostMessageHandler = setTimeout(() => {
-        panel.webview.postMessage(message);
-    }, 100);
+    const changeListener = vscode.workspace.onDidChangeTextDocument(e => {
+        if (e.contentChanges.length === 0) {
+            return;
+        }
+        if (targetUri ? e.document.uri.toString() !== targetUri.toString() : e.document.languageId !== 'alphatab') {
+            return;
+        }
+        debouncePostMessage({ alphatex: e.document.getText(), setting, sf2Dir });
+    });
+
+    panel.onDidDispose(() => {
+        if (debouncePostMessageHandler !== undefined) {
+            clearTimeout(debouncePostMessageHandler);
+        }
+        readyListener.dispose();
+        changeListener.dispose();
+    });
 }

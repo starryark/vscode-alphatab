@@ -47,6 +47,21 @@ const alphaInstance = {
     sf2Dir: undefined
 }
 
+// webview 里的 worker 无法 importScripts 跨源的 vscode-resource 地址，
+// 先在主线程 fetch 脚本并转成同源 blob URL 供 core.scriptFile 使用
+let alphaTabWorkerScriptUrl = null;
+async function prepareWorkerScript() {
+    try {
+        const scriptEl = document.querySelector('script[src*="alphaTab.min.js"]');
+        const resp = await fetch(scriptEl.src);
+        const code = await resp.text();
+        alphaTabWorkerScriptUrl = URL.createObjectURL(
+            new Blob([code], { type: 'application/javascript' }));
+    } catch (e) {
+        console.warn('alphaTab worker blob prep failed; playback disabled', e);
+    }
+}
+
 function play() {
     const inst = alphaInstance.at;
     if (inst) {
@@ -70,9 +85,13 @@ function changeGuitar(guitar) {
 }
 
 
-console.error = function() {
-    console.log(...arguments);
-    element.innerHTML = `<div class="error-container"><div class="error-block">Alpha Tex Syntax Error</div></div>`;
+function showError(error) {
+    const message = (error && error.message) ? error.message : String(error);
+    const block = document.createElement('div');
+    block.className = 'error-block';
+    block.textContent = message;
+    element.innerHTML = '<div class="error-container"></div>';
+    element.firstChild.appendChild(block);
 }
 
 
@@ -93,16 +112,43 @@ const defaultSetting = {
 };
 
 function simpleRender(alphatex, setting) {
+    if (alphaInstance.at) {
+        alphaInstance.at.destroy();
+        alphaInstance.at = undefined;
+    }
     element.innerHTML = alphatex;
     alphaInstance.alphatex = alphatex;
     alphaInstance.setting = setting;
 
     setting = setting || defaultSetting;
+    setting.core = setting.core || {};
+    setting.player = setting.player || {};
+    // 渲染放在主线程，避免 render worker 的 importScripts 报错
+    setting.core.useWorkers = false;
+    if (alphaTabWorkerScriptUrl) {
+        // 合成器必须跑在 worker 里，让它加载同源 blob 脚本
+        setting.core.scriptFile = alphaTabWorkerScriptUrl;
+        setting.player.outputMode = alphaTab.PlayerOutputMode.WebAudioScriptProcessor;
+    } else {
+        setting.player.enablePlayer = false;
+    }
     setting.staveProfile = alphaInstance.staveProfile;
     setting.player.soundFont = alphaInstance.sf2Dir + '/' + encodeURI(alphaInstance.guitar + '.sf2');
     console.log(setting.player.soundFont);
 
+    let rendered = false;
     alphaInstance.at = new alphaTab.AlphaTabApi(element, setting);
+    alphaInstance.at.renderFinished.on(() => {
+        rendered = true;
+    });
+    // 解析错误发生在渲染前，此时展示具体错误信息；
+    // 渲染成功后的错误（如播放器问题）只记录日志，不清空乐谱
+    alphaInstance.at.error.on(error => {
+        console.log('alphaTab error:', error);
+        if (!rendered) {
+            showError(error);
+        }
+    });
 
     const p = new Promise(resolve => {
         alphaInstance.at.soundFontLoaded.on(() => {
@@ -132,6 +178,10 @@ window.addEventListener('message', event => {
         simpleRender(alphatex, setting);
     }
 });
+
+// 监听器就绪、worker 脚本 blob 准备好后再通知扩展发送初始内容，避免消息在页面加载期间丢失
+const vscodeApi = acquireVsCodeApi();
+prepareWorkerScript().finally(() => vscodeApi.postMessage({ type: 'ready' }));
 
 // simpleRender(`\\title "Gymnopédie No.1"
 // .
@@ -180,7 +230,9 @@ window.addEventListener('message', event => {
     border: 1px solid rgba(200, 30, 10, 1);
     padding: 10px;
     font-size: 1.1rem;
-    width: 200px;
+    min-width: 200px;
+    max-width: 80%;
+    white-space: pre-wrap;
     display: flex;
     justify-content: center;
     align-items: center;

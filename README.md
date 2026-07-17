@@ -1,7 +1,40 @@
-# Alphatab 0.0.2
+# Alphatab 0.0.4 (fork)
 
 ![](https://img.shields.io/badge/typescript-blue)
 ![](https://img.shields.io/badge/alphatab.js-org)
+
+> This is a fork of [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab) with fixes for the preview webview. The upstream extension fails inside modern VS Code with repeated `importScripts` NetworkErrors and a blank preview.
+
+## What this fork fixes 🔧
+
+- **Worker loading (`importScripts` NetworkError):** alphaTab v1.8.4 renders and synthesizes audio in Web Workers, but workers inside a VS Code webview cannot load scripts from the cross-origin `vscode-resource` CDN. The webview now fetches `alphaTab.min.js` on the main thread and hands the workers a same-origin `blob:` URL (`core.scriptFile`), renders on the main thread (`core.useWorkers: false`), and uses the ScriptProcessor audio path instead of AudioWorklet (`player.outputMode`). Rendering and playback both work.
+- **Blank preview on open:** the extension now waits for a `ready` handshake from the webview before sending the initial content, so the first message is no longer lost while the page is still loading.
+- Upgraded the bundled alphaTab library to v1.8.4 and refreshed the Bravura fonts.
+
+## Install on another device 💻
+
+**Option A — download the prebuilt VSIX (easiest):**
+
+1. Download `alphatab-0.0.4.vsix` from this fork's [Releases page](https://github.com/starryark/vscode-alphatab/releases).
+2. Install it (or use VS Code UI: Extensions panel → `···` menu → *Install from VSIX...*):
+   ```
+   code --install-extension alphatab-0.0.4.vsix
+   ```
+3. Restart VS Code. If an older `kirigaya.alphatab` version was installed, uninstall it first: `code --uninstall-extension kirigaya.alphatab`.
+
+**Option B — build from source:**
+
+Requires Node.js 18+ and VS Code's `code` command on PATH.
+
+```
+git clone https://github.com/starryark/vscode-alphatab.git
+cd vscode-alphatab
+npm install
+npx --yes @vscode/vsce package        # produces alphatab-0.0.4.vsix (~130 MB, includes soundfonts)
+code --install-extension alphatab-0.0.4.vsix
+```
+
+Then restart VS Code, open a `.alphatab` file, and click the preview button in the editor title bar. To verify the fix, open *Developer: Open Webview Developer Tools* — there should be no `importScripts` errors.
 
 ## Feature ⚛️
 
