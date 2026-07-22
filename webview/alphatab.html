@@ -150,6 +150,26 @@ function simpleRender(alphatex, setting) {
         }
     });
 
+    alphaInstance.at.beatMouseDown.on(beat => {
+        if (beat && beat.voice && beat.voice.bar) {
+            vscodeApi.postMessage({
+                type: 'noteSelect',
+                barIndex: beat.voice.bar.index,
+                beatIndex: beat.index
+            });
+        }
+    });
+    alphaInstance.at.noteMouseDown.on(note => {
+        if (note && note.beat && note.beat.voice && note.beat.voice.bar) {
+            vscodeApi.postMessage({
+                type: 'noteSelect',
+                barIndex: note.beat.voice.bar.index,
+                beatIndex: note.beat.index,
+                noteIndex: note.index
+            });
+        }
+    });
+
     const p = new Promise(resolve => {
         alphaInstance.at.soundFontLoaded.on(() => {
             alphaInstance.canPlay = true;

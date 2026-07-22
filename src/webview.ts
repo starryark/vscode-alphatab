@@ -2,6 +2,7 @@ import * as fspath from 'path';
 import * as fs from 'fs';
 
 import * as vscode from 'vscode';
+import { resolveNotePosition } from './ast-parser';
 
 function getWebviewContent(extensionPath: string, panel?: vscode.WebviewPanel): string {
     // 找到你的 index.html 所在文件夹的绝对路径
@@ -99,6 +100,22 @@ export function openAlphatabPreview(context: vscode.ExtensionContext, uri?: vsco
             const alphatex = readTargetAlphatex();
             if (alphatex !== undefined) {
                 panel.webview.postMessage({ alphatex, setting, sf2Dir });
+            }
+        }
+        if (message && message.type === 'noteSelect') {
+            const text = readTargetAlphatex();
+            if (text && targetUri) {
+                const range = resolveNotePosition(text, message.barIndex, message.beatIndex, message.noteIndex);
+                const activeEditor = vscode.window.activeTextEditor;
+                const editor = (activeEditor && activeEditor.document.uri.toString() === targetUri.toString())
+                    ? activeEditor
+                    : vscode.window.visibleTextEditors.find(e => e.document.uri.toString() === targetUri.toString());
+                if (editor && range) {
+                    const startPos = new vscode.Position(range.startLine, range.startCol);
+                    const endPos = new vscode.Position(range.endLine, range.endCol);
+                    editor.selection = new vscode.Selection(startPos, endPos);
+                    editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+                }
             }
         }
     });
