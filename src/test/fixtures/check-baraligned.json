@@ -1,0 +1,121 @@
+{
+  "ok": true,
+  "file": "cover.alphatab",
+  "bars": "1-8",
+  "transpose": 0,
+  "gain": "high",
+  "digest": "source.json",
+  "hard": {
+    "validate": {
+      "ok": true,
+      "code": 0,
+      "parseFailed": false,
+      "stats": {
+        "title": "Fixture A",
+        "tempo": 149,
+        "tracks": 1,
+        "bars": 59,
+        "timeSignature": "4/4",
+        "tuning": [
+          "E4",
+          "B3",
+          "G3",
+          "D3",
+          "A2",
+          "E2"
+        ],
+        "beats": 263,
+        "notes": 280,
+        "pitchRange": "G3..C#6",
+        "fretRangeByString": {
+          "string1": "fret 1-21 (128 notes)",
+          "string2": "fret 6-20 (118 notes)",
+          "string3": "fret 0-20 (29 notes)",
+          "string4": "fret 10-17 (5 notes)"
+        }
+      }
+    },
+    "playability": {
+      "ok": true,
+      "errors": [],
+      "stats": {
+        "tracks": 1,
+        "bars": 59,
+        "beatsAnalyzed": 48,
+        "notesAnalyzed": 49,
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    "compare": {
+      "ok": true,
+      "hardGates": {
+        "melodicSkeleton": {
+          "covered": 33,
+          "total": 33,
+          "ok": true
+        },
+        "harmonicRoots": {
+          "covered": 8,
+          "total": 8,
+          "ok": true
+        }
+      },
+      "failures": []
+    }
+  },
+  "soft": {
+    "playability": [],
+    "compare": {
+      "chordQuality": {
+        "power": 2,
+        "exact": 6
+      },
+      "density": {
+        "tabNotes": 49,
+        "sourceNotes": 116,
+        "percent": 42
+      },
+      "dropped": [
+        {
+          "bar": 1,
+          "notes": [
+            "D5"
+          ]
+        },
+        {
+          "bar": 3,
+          "notes": [
+            "Bb4",
+            "Eb5",
+            "Eb2",
+            "Eb3"
+          ]
+        },
+        {
+          "bar": 5,
+          "notes": [
+            "C5",
+            "Eb5",
+            "C2",
+            "C3"
+          ]
+        },
+        {
+          "bar": 7,
+          "notes": [
+            "Bb4",
+            "Eb5",
+            "Eb2",
+            "Eb3"
+          ]
+        }
+      ],
+      "contour": {
+        "r": 0.586,
+        "warn": false
+      }
+    }
+  },
+  "failReasons": []
+}

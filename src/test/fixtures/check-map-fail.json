@@ -1,0 +1,196 @@
+{
+  "ok": false,
+  "file": "cover.alphatab",
+  "bars": "1-59",
+  "transpose": 0,
+  "gain": "high",
+  "digest": "source.json",
+  "hard": {
+    "validate": {
+      "ok": true,
+      "code": 0,
+      "parseFailed": false,
+      "stats": {
+        "title": "Fixture A",
+        "tempo": 149,
+        "tracks": 1,
+        "bars": 59,
+        "timeSignature": "4/4",
+        "tuning": [
+          "E4",
+          "B3",
+          "G3",
+          "D3",
+          "A2",
+          "E2"
+        ],
+        "beats": 263,
+        "notes": 280,
+        "pitchRange": "G3..C#6",
+        "fretRangeByString": {
+          "string1": "fret 1-21 (128 notes)",
+          "string2": "fret 6-20 (118 notes)",
+          "string3": "fret 0-20 (29 notes)",
+          "string4": "fret 10-17 (5 notes)"
+        }
+      }
+    },
+    "playability": {
+      "ok": true,
+      "errors": [],
+      "stats": {
+        "tracks": 1,
+        "bars": 59,
+        "beatsAnalyzed": 263,
+        "notesAnalyzed": 280,
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    "compare": {
+      "ok": false,
+      "map": "sidecar.json",
+      "mapResults": [
+        {
+          "mode": "quote",
+          "tabBars": [
+            1,
+            8
+          ],
+          "sourceBars": [
+            1,
+            8
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            9,
+            16
+          ],
+          "sourceBars": [
+            9,
+            16
+          ],
+          "ok": false,
+          "failures": [
+            {
+              "gate": "melodicSkeleton",
+              "entry": [
+                9,
+                16
+              ],
+              "message": "quote tabBars [9,16] top-line pc sequence [<48 pitch classes elided>] does not contain source skeleton [<32 pitch classes elided>] in order"
+            }
+          ]
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            17,
+            24
+          ],
+          "sourceBars": [
+            17,
+            24
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            25,
+            32
+          ],
+          "sourceBars": [
+            25,
+            32
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            33,
+            40
+          ],
+          "sourceBars": [
+            33,
+            40
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            41,
+            48
+          ],
+          "sourceBars": [
+            41,
+            48
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            49,
+            56
+          ],
+          "sourceBars": [
+            49,
+            56
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            57,
+            59
+          ],
+          "sourceBars": [
+            57,
+            59
+          ],
+          "ok": true,
+          "failures": []
+        }
+      ],
+      "failures": [
+        {
+          "gate": "melodicSkeleton",
+          "entry": [
+            9,
+            16
+          ],
+          "message": "quote tabBars [9,16] top-line pc sequence [<48 pitch classes elided>] does not contain source skeleton [<32 pitch classes elided>] in order",
+          "mode": "quote",
+          "tabBars": [
+            9,
+            16
+          ],
+          "sourceBars": [
+            9,
+            16
+          ]
+        }
+      ]
+    }
+  },
+  "soft": {
+    "playability": [],
+    "compare": null
+  },
+  "failReasons": [
+    "compare melodic skeleton"
+  ]
+}

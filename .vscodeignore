@@ -1,8 +1,11 @@
 .vscode/**
 .vscode-test/**
+.claude/**
 out/**
 node_modules/**
 src/**
+scripts/**
+webview/src/**
 .gitignore
 .yarnrc
 webpack.config.js
@@ -11,3 +14,21 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+
+# --- packaging weight -------------------------------------------------------
+# The two guitar soundfonts are ~162 MB together and were the entire reason the
+# VSIX weighed 137 MB. Only the 1.3 MB general-purpose bank ships; point
+# `alphatab.soundFonts` at local .sf2 files to use anything else.
+webview/sound/**
+!webview/sound/sonivox.sf2
+
+# Legacy Bravura formats no webview engine can reach (Electron is Chromium):
+# .eot is IE-only and .svg fonts were removed from Blink in 2015. 2.2 MB saved.
+webview/font/Bravura.eot
+webview/font/Bravura.svg
+
+# Demo GIFs are hotlinked from the README, not read from the package.
+figure/**
+
+package-lock.json
+CLAUDE.md

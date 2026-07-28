@@ -1,0 +1,17 @@
+{
+    // webview 侧单独一份配置：这里需要 DOM，而扩展宿主那份 tsconfig 故意不给 DOM，
+    // 免得宿主代码不小心去碰 document（宿主进程里根本没有）。
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "target": "ES2020",
+        "lib": ["ES2020", "DOM"],
+        "strict": true,
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true
+    },
+    "include": ["src/**/*.ts", "../src/protocol.ts"]
+}

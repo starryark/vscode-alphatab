@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "file": "tools/fixtures/overfull-voice.alphatab",
+  "stats": {
+    "title": "Overfull voice — 5 beats in 4/4",
+    "tempo": 120,
+    "tracks": 1,
+    "bars": 1,
+    "timeSignature": "4/4",
+    "tuning": [
+      "E4",
+      "B3",
+      "G3",
+      "D3",
+      "A2",
+      "E2"
+    ],
+    "beats": 5,
+    "notes": 5,
+    "pitchRange": "E3..A#3",
+    "fretRangeByString": {
+      "string3": "fret 3-3 (2 notes)",
+      "string4": "fret 2-2 (3 notes)"
+    }
+  },
+  "warnings": [
+    {
+      "type": "bar-fill",
+      "message": "Bar 1 (track \"0\") is overfull: 4800/3840 ticks (5.00 vs 4.00 quarter beats in 4/4)",
+      "bar": 1,
+      "voice": 0
+    }
+  ]
+}

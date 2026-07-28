@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "",
+	"name": "alphaTex",
 	"patterns": [
 		{
 			"include": "#keywords"
@@ -18,14 +18,20 @@
 	"repository": {
 		"keywords": {
 			"patterns": [{
-				"name": "keyword.control.",
+				"name": "keyword.control.alphatab",
 				"match": "\\\\[a-zA-Z]+"
 			}]
 		},
 		"strings": {
-			"name": "string.quoted.double.",
+			"name": "string.quoted.double.alphatab",
 			"begin": "\"",
-			"end": "\""
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.alphatab",
+					"match": "\\\\."
+				}
+			]
 		},
         "comment": {
             "patterns": [
@@ -58,18 +64,21 @@
             ]
         },
         "number": {
+            "comment": "Order matters: the longest token must be tried first, or the bare-integer rule swallows the fret of a fret.string pair. NOTE the escaping — in JSON, \"\\\\.\" is the regex \\. (a literal dot); \"\\\\\\\\.\" would be a backslash followed by any character, which is what this rule used to say and why fret.string notation was never highlighted.",
             "patterns": [
                 {
-                    "name": "support.function.number.",
-                    "match": "[0-9]+\\\\.[0-9]+\\\\.[0-9]+"
+                    "comment": "fret.string.duration, e.g. 12.2.8",
+                    "name": "constant.numeric.tab.alphatab",
+                    "match": "\\b[0-9]+\\.[0-9]+\\.[0-9]+"
                 },
                 {
-                    "name": "support.function.number.",
-                    "match": "[0-9]+\\\\.[0-9]+"
+                    "comment": "fret.string, e.g. 12.2 — the most common token in a guitar tab",
+                    "name": "constant.numeric.tab.alphatab",
+                    "match": "\\b[0-9]+\\.[0-9]+"
                 },
                 {
-                    "name": "support.function.number.",
-                    "match": "[0-9]+"
+                    "name": "constant.numeric.alphatab",
+                    "match": "\\b[0-9]+"
                 }
             ]
         }

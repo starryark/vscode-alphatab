@@ -1,0 +1,42 @@
+{
+  "ok": false,
+  "file": "tools/fixtures/broken-syntax.alphatab",
+  "errors": [
+    {
+      "code": 400,
+      "severity": "hint",
+      "message": "The dots separating score metadata, score contents and the sync points can be removed.",
+      "line": 3,
+      "col": 1,
+      "endLine": 3,
+      "endCol": 2
+    },
+    {
+      "code": 301,
+      "severity": "warning",
+      "message": "Metadata arguments should be wrapped into parenthesis.",
+      "line": 4,
+      "col": 5,
+      "endLine": 4,
+      "endCol": 8
+    },
+    {
+      "code": 202,
+      "severity": "error",
+      "message": "Unexpected 'Pipe' token. Expected one of following: Number,String,Ident",
+      "line": 5,
+      "col": 10,
+      "endLine": 5,
+      "endCol": 11
+    },
+    {
+      "code": 206,
+      "severity": "error",
+      "message": "Unexpected end of file. Group not closed.",
+      "line": 5,
+      "col": 10,
+      "endLine": 5,
+      "endCol": 10
+    }
+  ]
+}

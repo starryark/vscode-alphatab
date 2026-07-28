@@ -1,73 +1,127 @@
-# Alphatab 0.0.5 (fork)
+# Alphatab 0.1.0 (fork)
 
 ![](https://img.shields.io/badge/typescript-blue)
 ![](https://img.shields.io/badge/alphatab.js-org)
 
-> This is a fork of [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab) with fixes and features for the preview webview. The upstream extension fails inside modern VS Code with repeated `importScripts` NetworkErrors and a blank preview.
+> A fork of [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab).
+> The upstream extension fails inside modern VS Code with repeated `importScripts` NetworkErrors
+> and a blank preview. This fork fixes that and turns the preview into a working audition surface
+> for arranging: A/B compare, loop-a-phrase playback, and gate diagnostics in the Problems panel.
 
-## What this fork fixes & features 🔧
+## Features 🎸
 
-- **Interactive note jumping:** clicking any note or beat in the rendered preview window automatically moves the VS Code text cursor and selection directly to the corresponding source note in the `.alphatab` file.
-- **Worker loading (`importScripts` NetworkError):** alphaTab v1.8.4 renders and synthesizes audio in Web Workers, but workers inside a VS Code webview cannot load scripts from the cross-origin `vscode-resource` CDN. The webview now fetches `alphaTab.min.js` on the main thread and hands the workers a same-origin `blob:` URL (`core.scriptFile`), renders on the main thread (`core.useWorkers: false`), and uses the ScriptProcessor audio path instead of AudioWorklet (`player.outputMode`). Rendering and playback both work.
-- **Blank preview on open:** the extension now waits for a `ready` handshake from the webview before sending the initial content, so the first message is no longer lost while the page is still loading.
-- Upgraded the bundled alphaTab library to v1.8.4 and refreshed the Bravura fonts.
+**Preview & playback**
+- Renders alphaTex, re-rendering as you type — without reloading the soundfont or losing your
+  scroll and playback position.
+- Transport: play/pause, stop, seek bar with bar and time readouts, playback speed, metronome,
+  count-in, volume.
+- **Loop a bar range** — the control you want when auditioning one phrase over and over.
+- Zoom, page/horizontal layout, stave profile, display transpose, per-track mute/solo.
+- Section navigator built from `\section` markers. Print and MIDI export.
 
-## Install on another device 💻
+**A/B compare**
+- One panel holds both your arrangement and its reference score. `Alt+B` swaps between them,
+  keeping the bar position and resuming playback where it left off.
+- If a `sidecar.json` sits next to the files, its `tabBars`/`sourceBars` entries map bars between
+  the two sides, so the swap lands on the corresponding bar even where they do not line up 1:1.
 
-**Option A — download the prebuilt VSIX (easiest):**
+**Editing**
+- Diagnostics in the Problems panel as you type, with precise positions, from alphaTab's own
+  parser — a half-finished file still reports usefully instead of failing wholesale.
+- Completions with documentation, hover on `\keywords` and on fret tokens
+  (`5.3` → *G3 · string 3 (G) · fret 5*), snippets, outline and folding from `\section`.
+- Click a note in the preview to jump the editor cursor there, and move the editor cursor to
+  scroll the preview.
 
-1. Download `alphatab-0.0.5.vsix` from this fork's [Releases page](https://github.com/starryark/vscode-alphatab/releases).
-2. Install it (or use VS Code UI: Extensions panel → `···` menu → *Install from VSIX...*):
+**Companion tools**
+- Any CLI that takes a file and prints JSON can feed the Problems panel and a status-bar gate
+  indicator. Ships with a preset for the
+  [Piano-to-Guitar](#piano-to-guitar-workflow) toolchain.
+
+## Install 💻
+
+**Option A — prebuilt VSIX:**
+
+1. Download `alphatab-0.1.0.vsix` from this fork's
+   [Releases page](https://github.com/starryark/vscode-alphatab/releases).
+2. ```
+   code --install-extension alphatab-0.1.0.vsix
    ```
-   code --install-extension alphatab-0.0.5.vsix
-   ```
-3. Restart VS Code. If an older `kirigaya.alphatab` version was installed, uninstall it first: `code --uninstall-extension kirigaya.alphatab`.
+   (or Extensions panel → `···` → *Install from VSIX...*)
+3. Restart VS Code. If the upstream extension is installed, remove it first:
+   `code --uninstall-extension kirigaya.alphatab`.
 
-**Option B — build from source:**
-
-Requires Node.js 18+ and VS Code's `code` command on PATH.
+**Option B — build from source** (Node.js 18+):
 
 ```
 git clone https://github.com/starryark/vscode-alphatab.git
 cd vscode-alphatab
-npm install
-npx --yes @vscode/vsce package        # produces alphatab-0.0.5.vsix (~130 MB, includes soundfonts)
-code --install-extension alphatab-0.0.5.vsix
+npm ci
+npx --yes @vscode/vsce package        # produces alphatab-0.1.0.vsix (~2.4 MB)
+code --install-extension alphatab-0.1.0.vsix
 ```
 
-Then restart VS Code, open a `.alphatab` file, and click the preview button in the editor title bar. To verify the fix, open *Developer: Open Webview Developer Tools* — there should be no `importScripts` errors.
+Then open a `.alphatab` file and click the preview button in the editor title bar.
 
-## Feature ⚛️
+### Soundfonts
 
-- Render Tab with alpha tex ( ✔ )
-- Play with three different guitar sounds ( ✔ )
-- Interactive preview-to-editor note cursor jump ( ✔ )
+Only a small general-purpose bank (1.3 MB) ships with the extension, which is why the package is
+2.4 MB rather than the 137 MB it used to be. To use your own instrument banks, point
+`alphatab.soundFonts` at them:
 
+```jsonc
+"alphatab.soundFonts": [
+  "C:/soundfonts/Acoustic Guitars JNv2.4.sf2",
+  "C:/soundfonts/Electric Guitars JNv4.4.sf2"
+]
+```
+
+They stay on your disk and appear in the preview's soundfont picker.
+
+## Keybindings
+
+| Key | Action |
+|---|---|
+| `Alt+Space` | Play / pause |
+| `Alt+B` | Swap A/B |
+| `Alt+L` | Toggle loop |
+
+## Piano-to-Guitar workflow
+
+If the open file lives inside a [Piano-to-Guitar](https://github.com/) project (detected by
+walking up for `tools/check.mjs` and `AGENTS.md`), the extension runs that project's gate on save
+and reports the results inline:
+
+- `validate.mjs` and `playability.mjs` always; `check.mjs` as well when a `sidecar.json` and a
+  `source.json` digest are present.
+- Findings land on the right bar in the Problems panel; the status bar shows the gate verdict.
+- A `0/0` comparison row is flagged as a **vacuous** pass rather than shown as green, and
+  `playability`'s exit code is ignored in favour of its `errors[]` — both are documented traps in
+  that project.
+- `alphatab.companion.snapOnSave` (off by default) runs `history.mjs snap` before each save,
+  closing the one gap in that workflow's history: a hand edit made in the editor.
+
+Set `alphatab.companion.transpose` per project if the arrangement sits above its source, and
+`alphatab.companion.preset` to `none` to turn the integration off.
+
+## The webview fixes
+
+Kept here because each looks removable and each breaks the extension:
+
+- **`importScripts` NetworkError / blank preview.** alphaTab renders and synthesizes in Web
+  Workers, but workers in a VS Code webview cannot load the cross-origin `vscode-cdn.net` URL
+  alphaTab auto-detects. Rendering moves to the main thread (`core.useWorkers: false`), and the
+  bundle is fetched on the main thread and handed to the synthesizer worker as a same-origin
+  `blob:` URL (`core.scriptFile`). Audio uses the ScriptProcessor path because AudioWorklet's
+  `addModule()` hits the same wall.
+- **Blank preview on open.** The extension waits for a `ready` handshake before sending content;
+  messages posted before the webview attaches its listener are silently dropped.
+
+See `CLAUDE.md` for the full list and for the two index-numbering traps in alphaTab's API.
 
 ---
 
-[github repo](https://github.com/LSTM-Kirigaya/vscode-alphatab), beg for star :D
+Built on [AlphaTab](https://alphatab.net/). If you are new to alphaTex, the
+[language tutorial](https://alphatab.net/docs/alphatex/introduction/) is the place to start.
 
-This is a vscode extension impl of the [AlphaTab](https://alphatab.net/). With alpha tex, a format for guitar tab, you can write and render your guitar tab just in vscode.
-
-## Quick Start 🪽
-
-open vscode, create `<name>.alphatab` and write alphatex, click `open preview` in top right corner of your editor and review the score in webview.
-
-<img src="https://github.com/LSTM-Kirigaya/vscode-alphatab/blob/main/figure/output-1.gif?raw=true" />
-
-You can switch render mode (term as stave profile) through first yellow switch block ╰(*°▽°*)╯.
-
-<img src="https://github.com/LSTM-Kirigaya/vscode-alphatab/blob/main/figure/output-2.gif?raw=true" />
-
-You can even play tab with build-in guitar soundfile! I provide three guitar sounds: 8 bit LOFI guitar, Acoustic Guitar and Electric Guitar. You can use the function to have a quick view over the melody 🎸.
-
-<img src="https://github.com/LSTM-Kirigaya/vscode-alphatab/blob/main/figure/output-3.gif?raw=true" />
-
-## Write and Render
-
-Once open the preview, you can write the alphatex, and webview will receive the change debouncively and rerender the score.
-
-If you aren't familiar with alphatex, [here](https://alphatab.net/docs/alphatex/introduction/) is the tutorial.
-
-If you are a guitar fan like me, welcome to visit my website: [https://kirigaya.cn](https://kirigaya.cn).
+Upstream project: [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab).

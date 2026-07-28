@@ -1,0 +1,25 @@
+{
+  "ok": false,
+  "file": "tools/fixtures/non-adjacent-dyad.alphatab",
+  "gain": "high",
+  "bars": null,
+  "policy": null,
+  "warningsAsErrors": false,
+  "stats": {
+    "tracks": 1,
+    "bars": 1,
+    "beatsAnalyzed": 1,
+    "notesAnalyzed": 2,
+    "errorCount": 1,
+    "warningCount": 0
+  },
+  "errors": [
+    {
+      "type": "non-adjacent-strings",
+      "message": "beat strikes non-adjacent strings 2,6 — unplayable with a flatpick; arpeggiate ({au}/{ad}), brush ({bd}/{bu}), or re-voice onto adjacent strings",
+      "bar": 1,
+      "beat": 0
+    }
+  ],
+  "warnings": []
+}

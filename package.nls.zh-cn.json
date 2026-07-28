@@ -1,3 +1,26 @@
 {
-    "alphatab.preview": "在 webview 内预览 alphatex"
+    "alphatab.preview": "在 webview 内预览 alphatex",
+    "alphatab.playPause": "播放 / 暂停",
+    "alphatab.stop": "停止",
+    "alphatab.toggleAB": "与参照谱 A/B 对照",
+    "alphatab.toggleLoop": "循环播放选定小节",
+    "alphatab.runGate": "运行伴生工具门禁检查",
+    "alphatab.snapshot": "为当前谱面打快照（history.mjs snap）",
+    "alphatab.config.companionEnabled": "运行伴生工具的检查，并把结论显示在 Problems 面板里。",
+    "alphatab.config.companionPreset": "使用哪套伴生工具链。auto 会从打开的文件往上找 Piano-to-Guitar 仓库。",
+    "alphatab.config.companionRunOn": "什么时候跑门禁：存盘时，还是只在手动触发时。",
+    "alphatab.config.companionTranspose": "改编谱比原谱高几个半音。这个值推断不出来，需要按项目配置。留空则不传 --transpose。",
+    "alphatab.config.companionGain": "传给可演奏性检查的增益档位，它决定同时最多能响几个音。",
+    "alphatab.config.companionWarningsAsErrors": "把可演奏性的提示性警告也当成硬性失败。",
+    "alphatab.config.companionSnapOnSave": "每次存盘前跑一次 history.mjs snap。在编辑器里手改谱面，是整个门禁循环唯一不会自动留快照的状态。默认关闭，因为它会往你的仓库里写东西。",
+    "alphatab.config.syncCursor": "移动编辑器光标时，预览跟着滚到对应的小节。",
+    "alphatab.config.staveProfile": "渲染哪几种谱表：五线谱、六线谱，或两者都要。",
+    "alphatab.config.layoutMode": "分页排版（自动折行）或横向排版（单行无限延伸）。",
+    "alphatab.config.scale": "谱面缩放比例。",
+    "alphatab.config.soundFonts": "额外 .sf2 音色库的绝对路径。扩展只内置一个小体积的通用音色库，大的乐器音色库留在你自己的磁盘上，这样扩展包不会变得很大。",
+    "alphatab.config.defaultSoundFont": "默认选中的音色库名称或路径。留空则用第一个可用的。",
+    "alphatab.config.masterVolume": "播放音量，0 到 1。",
+    "alphatab.config.outputMode": "音频输出方式。AudioWorklet 在 webview 里可能加载失败，所以默认用更稳妥的 ScriptProcessor。改这一项需要重新打开预览。",
+    "alphatab.config.renderDebounceMs": "编辑后重新渲染的延迟，单位毫秒。",
+    "alphatab.config.abPartner": "用来寻找 A/B 对照文件的文件名组合。打开的文件如果匹配其中一个名字，同目录下叫另一个名字的文件就会成为参照谱。"
 }

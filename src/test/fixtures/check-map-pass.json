@@ -1,0 +1,283 @@
+{
+  "ok": true,
+  "file": "cover.alphatab",
+  "bars": "1-108",
+  "transpose": 0,
+  "gain": "high",
+  "digest": "source.json",
+  "hard": {
+    "validate": {
+      "ok": true,
+      "code": 0,
+      "parseFailed": false,
+      "stats": {
+        "title": "Fixture B",
+        "tempo": 120,
+        "tracks": 1,
+        "bars": 108,
+        "timeSignature": "4/4",
+        "tuning": [
+          "E4",
+          "B3",
+          "G3",
+          "D3",
+          "A2",
+          "E2"
+        ],
+        "beats": 598,
+        "notes": 602,
+        "pitchRange": "C#3..F#5",
+        "fretRangeByString": {
+          "string1": "fret 4-14 (211 notes)",
+          "string2": "fret 2-14 (320 notes)",
+          "string3": "fret 6-13 (59 notes)",
+          "string4": "fret 2-11 (11 notes)",
+          "string5": "fret 4-4 (1 notes)"
+        }
+      }
+    },
+    "playability": {
+      "ok": true,
+      "errors": [],
+      "stats": {
+        "tracks": 1,
+        "bars": 108,
+        "beatsAnalyzed": 598,
+        "notesAnalyzed": 602,
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    "compare": {
+      "ok": true,
+      "map": "sidecar.json",
+      "mapResults": [
+        {
+          "mode": "quote",
+          "tabBars": [
+            1,
+            2
+          ],
+          "sourceBars": [
+            1,
+            2
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            3,
+            3
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            4,
+            5
+          ],
+          "sourceBars": [
+            4,
+            5
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            6,
+            6
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            7,
+            7
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            8,
+            10
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            11,
+            12
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            13,
+            13
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "quote",
+          "tabBars": [
+            14,
+            14
+          ],
+          "sourceBars": [
+            14,
+            14
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            15,
+            22
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            23,
+            30
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            31,
+            38
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            39,
+            46
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            47,
+            54
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            55,
+            62
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            63,
+            64
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            65,
+            72
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            73,
+            79
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            80,
+            80
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            81,
+            88
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            89,
+            96
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            97,
+            104
+          ],
+          "ok": true,
+          "failures": []
+        },
+        {
+          "mode": "free",
+          "tabBars": [
+            105,
+            108
+          ],
+          "ok": true,
+          "failures": []
+        }
+      ],
+      "failures": []
+    }
+  },
+  "soft": {
+    "playability": [],
+    "compare": null
+  },
+  "failReasons": []
+}

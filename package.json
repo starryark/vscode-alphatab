@@ -2,7 +2,7 @@
     "name": "alphatab",
     "displayName": "alphatab",
     "description": "use alpha tex to write guitar tab",
-    "version": "0.0.5",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.85.0"
     },
@@ -12,7 +12,8 @@
     "publisher": "kirigaya",
     "icon": "image/icon.png",
     "repository": {
-        "url": "https://github.com/LSTM-Kirigaya/vscode-alphatab"
+        "type": "git",
+        "url": "https://github.com/starryark/vscode-alphatab.git"
     },
     "categories": [
         "Programming Languages",
@@ -26,7 +27,39 @@
             {
                 "command": "alphatab.preview",
                 "title": "%alphatab.preview%",
+                "category": "alphaTab",
                 "icon": "$(open-preview)"
+            },
+            {
+                "command": "alphatab.playPause",
+                "title": "%alphatab.playPause%",
+                "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.stop",
+                "title": "%alphatab.stop%",
+                "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.toggleAB",
+                "title": "%alphatab.toggleAB%",
+                "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.toggleLoop",
+                "title": "%alphatab.toggleLoop%",
+                "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.runGate",
+                "title": "%alphatab.runGate%",
+                "category": "alphaTab",
+                "icon": "$(checklist)"
+            },
+            {
+                "command": "alphatab.snapshot",
+                "title": "%alphatab.snapshot%",
+                "category": "alphaTab"
             }
         ],
         "menus": {
@@ -36,13 +69,194 @@
                     "command": "alphatab.preview",
                     "group": "navigation@1"
                 }
+            ],
+            "commandPalette": [
+                {
+                    "command": "alphatab.playPause",
+                    "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+                },
+                {
+                    "command": "alphatab.stop",
+                    "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+                },
+                {
+                    "command": "alphatab.toggleAB",
+                    "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+                },
+                {
+                    "command": "alphatab.toggleLoop",
+                    "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+                }
             ]
+        },
+        "keybindings": [
+            {
+                "command": "alphatab.playPause",
+                "key": "alt+space",
+                "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+            },
+            {
+                "command": "alphatab.toggleAB",
+                "key": "alt+b",
+                "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+            },
+            {
+                "command": "alphatab.toggleLoop",
+                "key": "alt+l",
+                "when": "editorLangId == alphatab || activeWebviewPanelId == alphatab.preview"
+            }
+        ],
+        "configuration": {
+            "title": "alphaTab",
+            "properties": {
+                "alphatab.staveProfile": {
+                    "type": "string",
+                    "enum": [
+                        "default",
+                        "scoretab",
+                        "score",
+                        "tab",
+                        "tabmixed"
+                    ],
+                    "default": "default",
+                    "description": "%alphatab.config.staveProfile%"
+                },
+                "alphatab.layoutMode": {
+                    "type": "string",
+                    "enum": [
+                        "page",
+                        "horizontal"
+                    ],
+                    "default": "page",
+                    "description": "%alphatab.config.layoutMode%"
+                },
+                "alphatab.scale": {
+                    "type": "number",
+                    "default": 1,
+                    "minimum": 0.25,
+                    "maximum": 4,
+                    "description": "%alphatab.config.scale%"
+                },
+                "alphatab.soundFonts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "description": "%alphatab.config.soundFonts%"
+                },
+                "alphatab.defaultSoundFont": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%alphatab.config.defaultSoundFont%"
+                },
+                "alphatab.masterVolume": {
+                    "type": "number",
+                    "default": 1,
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "%alphatab.config.masterVolume%"
+                },
+                "alphatab.player.outputMode": {
+                    "type": "string",
+                    "enum": [
+                        "scriptProcessor",
+                        "audioWorklet"
+                    ],
+                    "default": "scriptProcessor",
+                    "description": "%alphatab.config.outputMode%"
+                },
+                "alphatab.renderDebounceMs": {
+                    "type": "number",
+                    "default": 150,
+                    "minimum": 0,
+                    "maximum": 2000,
+                    "description": "%alphatab.config.renderDebounceMs%"
+                },
+                "alphatab.ab.partner": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "cover.alphatab",
+                        "source.alphatab"
+                    ],
+                    "description": "%alphatab.config.abPartner%"
+                },
+                "alphatab.companion.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%alphatab.config.companionEnabled%"
+                },
+                "alphatab.companion.preset": {
+                    "type": "string",
+                    "enum": [
+                        "auto",
+                        "none",
+                        "piano-to-guitar"
+                    ],
+                    "default": "auto",
+                    "description": "%alphatab.config.companionPreset%"
+                },
+                "alphatab.companion.runOn": {
+                    "type": "string",
+                    "enum": [
+                        "save",
+                        "manual"
+                    ],
+                    "default": "save",
+                    "description": "%alphatab.config.companionRunOn%"
+                },
+                "alphatab.companion.transpose": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "%alphatab.config.companionTranspose%"
+                },
+                "alphatab.companion.gain": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "enum": [
+                        "high",
+                        "crunch",
+                        "clean",
+                        null
+                    ],
+                    "default": null,
+                    "description": "%alphatab.config.companionGain%"
+                },
+                "alphatab.companion.warningsAsErrors": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "%alphatab.config.companionWarningsAsErrors%"
+                },
+                "alphatab.companion.snapOnSave": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "%alphatab.config.companionSnapOnSave%"
+                },
+                "alphatab.syncCursor": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%alphatab.config.syncCursor%"
+                }
+            }
         },
         "languages": [
             {
                 "id": "alphatab",
+                "aliases": [
+                    "alphaTex",
+                    "alphatab"
+                ],
                 "extensions": [
-                    ".alphatab"
+                    ".alphatab",
+                    ".atex"
                 ],
                 "icon": {
                     "dark": "icon/guitar.dark.svg",
@@ -57,6 +271,12 @@
                 "scopeName": "source.alphatab",
                 "path": "./syntaxes/alphatab.tmLanguage.json"
             }
+        ],
+        "snippets": [
+            {
+                "language": "alphatab",
+                "path": "./snippets/alphatab.json"
+            }
         ]
     },
     "scripts": {
@@ -66,9 +286,11 @@
         "package": "webpack --mode production --devtool hidden-source-map",
         "compile-tests": "tsc -p . --outDir out",
         "watch-tests": "tsc -p . -w --outDir out",
-        "pretest": "npm run compile-tests && npm run compile && npm run lint",
+        "sync:vendor": "node scripts/sync-vendor.mjs",
+        "check:vendor": "node scripts/sync-vendor.mjs --check",
+        "pretest": "npm run check:vendor && npm run compile-tests && npm run lint",
         "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
+        "test": "mocha out/test/**/*.test.js"
     },
     "devDependencies": {
         "@types/glob": "^8.0.0",
@@ -87,8 +309,6 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "vscode-languageserver": "^9.0.1",
-        "vscode-languageserver-protocol": "^3.17.5",
-        "vscode-languageserver-textdocument": "^1.0.1"
+        "@coderline/alphatab": "^1.8.4"
     }
 }

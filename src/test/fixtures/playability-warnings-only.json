@@ -1,0 +1,103 @@
+{
+  "ok": false,
+  "file": "tools/fixtures/position-jump-slow.alphatab",
+  "gain": "high",
+  "bars": null,
+  "policy": null,
+  "warningsAsErrors": false,
+  "stats": {
+    "tracks": 1,
+    "bars": 3,
+    "beatsAnalyzed": 24,
+    "notesAnalyzed": 24,
+    "errorCount": 0,
+    "warningCount": 14
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 0
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 1
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 2
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 3
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 4
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 5
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 1: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 1,
+      "beat": 6
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 0
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 1
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 2
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 3
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 4
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 3 -> 13) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 5
+    },
+    {
+      "type": "position-jump-slow",
+      "message": "Bar 2: slow position jump of 10 frets (fret 13 -> 3) between consecutive beats slower than a 16th — a hand-station shift this large at eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, use an open string, or slide {sl}.",
+      "bar": 2,
+      "beat": 6
+    }
+  ]
+}

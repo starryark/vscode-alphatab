@@ -1,0 +1,83 @@
+{
+    "Song skeleton": {
+        "prefix": "song",
+        "body": [
+            "\\\\title \"${1:曲名}\"",
+            "\\\\subtitle \"${2:副标题}\"",
+            "\\\\tempo ${3:120}",
+            ".",
+            "\\\\track \"${4:Solo Electric Guitar}\"",
+            "\\\\staff {score tabs}",
+            "\\\\tuning (E4 B3 G3 D3 A2 E2)",
+            "\\\\instrument ${5:30}",
+            "\\\\clef g2",
+            "\\\\ks ${6:c}",
+            "\\\\ts (${7:4} ${8:4})",
+            "\\\\section \"${9:Intro}\"",
+            "$0"
+        ],
+        "description": "一份完整的独奏吉他谱骨架（标准定弦）"
+    },
+    "Track block": {
+        "prefix": "track",
+        "body": [
+            "\\\\track \"${1:音轨名}\"",
+            "\\\\staff {${2|tabs,score,score tabs|}}",
+            "\\\\tuning (E4 B3 G3 D3 A2 E2)",
+            "\\\\instrument ${3:30}",
+            "$0"
+        ],
+        "description": "新开一条吉他音轨"
+    },
+    "Section": {
+        "prefix": "section",
+        "body": "\\\\section \"${1:段落名}\"",
+        "description": "段落标记（同时出现在预览的段落导航和大纲视图里）"
+    },
+    "Time signature": {
+        "prefix": "ts",
+        "body": "\\\\ts (${1:4} ${2:4})",
+        "description": "拍号"
+    },
+    "Repeat block": {
+        "prefix": "repeat",
+        "body": [
+            "\\\\ro ${1:第一小节} |",
+            "${2:第二小节} \\\\rc ${3:2} |",
+            "$0"
+        ],
+        "description": "反复段落"
+    },
+    "Alternate endings": {
+        "prefix": "endings",
+        "body": [
+            "\\\\ae (1) ${1:一房} |",
+            "\\\\ae (2) ${2:二房} |",
+            "$0"
+        ],
+        "description": "跳房子反复"
+    },
+    "Chord": {
+        "prefix": "chord",
+        "body": "(${1:3.5} ${2:2.4} ${3:0.3} ${4:1.2}).${5:4}",
+        "description": "同时发声的和弦（注意相邻弦才好用拨片扫出来）"
+    },
+    "Second voice": {
+        "prefix": "voice",
+        "body": [
+            "\\\\voice",
+            "$0"
+        ],
+        "description": "在当前谱表上新开一条声部（第一个 \\voice 得到的是声部 1）"
+    },
+    "Drop D tuning": {
+        "prefix": "dropd",
+        "body": "\\\\tuning (E4 B3 G3 D3 A2 D2)",
+        "description": "Drop D 定弦"
+    },
+    "Standard tuning": {
+        "prefix": "tuning",
+        "body": "\\\\tuning (E4 B3 G3 D3 A2 E2)",
+        "description": "标准定弦（从最高弦写起）"
+    }
+}

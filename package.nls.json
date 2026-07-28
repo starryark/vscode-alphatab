@@ -1,3 +1,26 @@
 {
-    "alphatab.preview": "Preview alphatex in webview"
+    "alphatab.preview": "Preview alphatex in webview",
+    "alphatab.playPause": "Play / Pause",
+    "alphatab.stop": "Stop",
+    "alphatab.toggleAB": "Toggle A/B against the reference score",
+    "alphatab.toggleLoop": "Toggle loop over the selected bars",
+    "alphatab.runGate": "Run companion gate checks",
+    "alphatab.snapshot": "Snapshot the current tab (history.mjs snap)",
+    "alphatab.config.companionEnabled": "Run companion tool checks and report them in the Problems panel.",
+    "alphatab.config.companionPreset": "Which companion toolchain to use. 'auto' detects a Piano-to-Guitar repository above the open file.",
+    "alphatab.config.companionRunOn": "When to run the gate: on save, or only when invoked manually.",
+    "alphatab.config.companionTranspose": "Semitones the arrangement sits above its source. Cannot be inferred, so it must be set per project. Null omits --transpose.",
+    "alphatab.config.companionGain": "Gain stage passed to the playability check, which bounds how many notes may sound at once.",
+    "alphatab.config.companionWarningsAsErrors": "Treat advisory playability warnings as hard failures.",
+    "alphatab.config.companionSnapOnSave": "Run 'history.mjs snap' before each save. A hand edit in the editor is the one state the gate loop does not snapshot on its own. Off by default because it writes into your repository.",
+    "alphatab.config.syncCursor": "Scroll the preview to the bar under the editor cursor as you move it.",
+    "alphatab.config.staveProfile": "Which staves to render: notation, tablature, or both.",
+    "alphatab.config.layoutMode": "Page layout (wraps into systems) or horizontal (one endless row).",
+    "alphatab.config.scale": "Zoom factor for the rendered score.",
+    "alphatab.config.soundFonts": "Absolute paths to additional .sf2 soundfonts. Only a small general-purpose bank ships with the extension; large instrument banks stay on your disk so the extension package stays small.",
+    "alphatab.config.defaultSoundFont": "Label or path of the soundfont to select by default. Empty means the first available one.",
+    "alphatab.config.masterVolume": "Playback volume, 0 to 1.",
+    "alphatab.config.outputMode": "Audio output path. AudioWorklet can fail to load inside a webview, so ScriptProcessor is the safe default. Changing this requires reopening the preview.",
+    "alphatab.config.renderDebounceMs": "Delay before re-rendering after an edit, in milliseconds.",
+    "alphatab.config.abPartner": "File name pair used to find the A/B counterpart of the open file. If the open file matches one entry, the sibling named after the other entry becomes the reference score."
 }
