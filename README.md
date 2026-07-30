@@ -38,6 +38,26 @@
   indicator. Ships with a preset for the
   [Piano-to-Guitar](#piano-to-guitar-workflow) toolchain.
 
+## Demonstrations 🎥
+
+**Jump to tab**
+Demonstrates automatically jumping to alphatab text where the note is selected in the player.
+
+![Jump to tab](jump_tab.gif)
+
+**Change Speed**
+Demonstrates changing the playback speed in the player.
+
+![Change Speed](Change_Speed.gif)
+
+**Change Tab Format**
+Demonstrates changing the displayed format of the tab in the player.
+
+![Change Tab Format](Change_Tab_Format.gif)
+
+**Export using Print Function**
+An example exported using the 'print' function: [alphatab-print-example.html](alphatab-print-example.html)
+
 ## Install 💻
 
 **Option A — prebuilt VSIX:**
