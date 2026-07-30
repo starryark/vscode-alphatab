@@ -13,7 +13,7 @@ import { ScoreModel } from './score-model';
 import { CompanionService } from './companion/service';
 import { findToolRoot } from './companion/piano-to-guitar';
 import { runCommand } from './companion/runner';
-
+import { barMapFromSidecar, Sidecar } from './bar-map';
 /**
  * 语言相关的 provider。注意这里没有 language server——registerLSP 这个旧名字
  * 和曾经的三个 vscode-languageserver 依赖都是误导，依赖已经删掉了。
@@ -76,7 +76,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     registerLanguageFeatures(context);
 
-    const command = (name: string, handler: (uri?: vscode.Uri) => void) =>
+    const command = (name: string, handler: (uri?: vscode.Uri, ...args: any[]) => void) =>
         context.subscriptions.push(
             vscode.commands.registerCommand(`alphatab.${name}`, handler)
         );
@@ -129,6 +129,111 @@ export function activate(context: vscode.ExtensionContext): void {
         if (target) {
             void snapshot(target, 'vscode 手动快照');
         }
+    });
+
+    command('importSoundFont', async uri => {
+        const uris = await vscode.window.showOpenDialog({
+            canSelectFiles: true,
+            canSelectFolders: false,
+            canSelectMany: false,
+            filters: { 'SoundFont': ['sf2'] },
+            title: '导入音色库 (SoundFont)'
+        });
+        if (!uris || uris.length === 0) {
+            return;
+        }
+        const file = uris[0].fsPath;
+        const config = vscode.workspace.getConfiguration('alphatab');
+        const fonts = config.get<string[]>('soundFonts', []) || [];
+        if (!fonts.includes(file)) {
+            const newFonts = [...fonts, file];
+            await config.update('soundFonts', newFonts, vscode.ConfigurationTarget.Global);
+        }
+        await config.update('defaultSoundFont', file, vscode.ConfigurationTarget.Global);
+    });
+
+    command('setDefaultSoundFont', async (uri, fontUri: string, label?: string) => {
+        if (!label) return;
+        const config = vscode.workspace.getConfiguration('alphatab');
+        await config.update('defaultSoundFont', label, vscode.ConfigurationTarget.Global);
+    });
+
+    command('pickPartner', async uri => {
+        const target = activeAlphatabUri(uri);
+        if (!target) return;
+        const panel = AlphatabPanel.forUri(target);
+        if (!panel) return;
+        
+        const uris = await vscode.window.showOpenDialog({
+            canSelectFiles: true,
+            canSelectFolders: false,
+            canSelectMany: false,
+            filters: { 'alphaTab': ['alphatab', 'tex', 'gp3', 'gp4', 'gp5', 'gp'] },
+            defaultUri: vscode.Uri.file(fspath.dirname(target.fsPath)),
+            title: '选择对照参照谱'
+        });
+        
+        if (!uris || uris.length === 0) return;
+        
+        const partnerUri = uris[0];
+        let alphatex: string;
+        try {
+            alphatex = fs.readFileSync(partnerUri.fsPath, 'utf-8');
+        } catch {
+            return;
+        }
+        
+        const dir = fspath.dirname(target.fsPath);
+        let sidecar: Sidecar | undefined;
+        try {
+            sidecar = JSON.parse(fs.readFileSync(fspath.join(dir, 'sidecar.json'), 'utf-8')) as Sidecar;
+        } catch {
+            sidecar = undefined;
+        }
+        
+        const forward = barMapFromSidecar(sidecar);
+        // We assume the active file is the cover (tab), and the picked file is the source.
+        panel.setPartner({
+            alphatex,
+            fileName: fspath.basename(partnerUri.fsPath),
+            barMap: forward
+        });
+    });
+
+    command('print', async uri => {
+        const target = activeAlphatabUri(uri);
+        if (!target) return;
+        const document = vscode.workspace.textDocuments.find(d => d.uri.toString() === target.toString());
+        const text = document?.getText() ?? readFileSafe(target.fsPath);
+        if (text === undefined) return;
+
+        const tmpHtml = fspath.join(require('os').tmpdir(), `alphatab-print-${Date.now()}.html`);
+        const b64 = Buffer.from(text).toString('base64');
+        const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Print - ${fspath.basename(target.fsPath)}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"></script>
+    <style>body { margin: 0; padding: 0; }</style>
+</head>
+<body>
+    <div id="alphaTab"></div>
+    <script>
+        const tex = decodeURIComponent(escape(atob("${b64}")));
+        const api = new alphaTab.AlphaTabApi(document.getElementById('alphaTab'), {
+            display: { layoutMode: 'page' },
+            player: { enablePlayer: false }
+        });
+        api.renderFinished.on(() => {
+            setTimeout(() => window.print(), 500);
+        });
+        api.tex(tex);
+    </script>
+</body>
+</html>`;
+        fs.writeFileSync(tmpHtml, html);
+        await vscode.env.openExternal(vscode.Uri.file(tmpHtml));
     });
 
     // 诊断跟着文档走，不需要先打开预览面板。alphaTab 的解析器在进程内就能跑，

@@ -129,7 +129,11 @@ function syncToolbar(): void {
  * 听到改编谱第 12 小节觉得不对，按一下就能听参照谱的对应位置。
  */
 function toggleAB(): void {
-    if (!hasPartner || !viewB.isCreated) {
+    if (!hasPartner) {
+        post({ type: 'command', command: 'pickPartner' });
+        return;
+    }
+    if (!viewB.isCreated) {
         return;
     }
     const from = active();
@@ -146,16 +150,18 @@ function toggleAB(): void {
     viewA.setVisible(side === 'a');
     viewB.setVisible(side === 'b');
 
-    const to = active();
-    to.seekToBar(targetBar);
-    // 循环区间也跟着换算过去，两边审的才是同一段音乐。
-    if (from.loopRange) {
-        to.setLoop(mapRange(from.loopRange, entries));
-    }
-    if (wasPlaying) {
-        to.playPause();
-    }
-    scheduleSync();
+    setTimeout(() => {
+        const to = active();
+        to.seekToBar(targetBar);
+        // 循环区间也跟着换算过去，两边审的才是同一段音乐。
+        if (from.loopRange) {
+            to.setLoop(mapRange(from.loopRange, entries));
+        }
+        if (wasPlaying) {
+            to.playPause();
+        }
+        scheduleSync();
+    }, 50);
 }
 
 // --------------------------------------------------------------------------
@@ -175,9 +181,8 @@ const toolbar = new Toolbar(toolbarRoot, {
         render.staveProfile = staveProfile;
         bothViews(v => v.applyRenderSettings({ staveProfile }));
     },
-    setSoundFont: uri => {
-        player.soundFontUri = uri;
-        bothViews(v => v.applyPlayerSettings({ soundFontUri: uri }));
+    setSoundFont: (uri, label) => {
+        post({ type: 'command', command: 'setDefaultSoundFont', args: [uri, label] });
     },
     setTranspose: semitones => {
         render.displayTranspose = semitones;
@@ -197,8 +202,9 @@ const toolbar = new Toolbar(toolbarRoot, {
         }
         scheduleSync();
     },
-    print: () => active().print(),
-    exportMidi: () => active().downloadMidi()
+    print: () => post({ type: 'command', command: 'print' }),
+    exportMidi: () => active().downloadMidi(),
+    importSoundFont: () => post({ type: 'command', command: 'importSoundFont' })
 });
 
 function bothViews(action: (view: ScoreView) => void): void {

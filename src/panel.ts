@@ -254,7 +254,11 @@ export class AlphatabPanel {
                 this.lastState = message;
                 break;
             case 'command':
-                void vscode.commands.executeCommand(`alphatab.${message.command}`, this.uri);
+                if (message.args) {
+                    void vscode.commands.executeCommand(`alphatab.${message.command}`, this.uri, ...message.args);
+                } else {
+                    void vscode.commands.executeCommand(`alphatab.${message.command}`, this.uri);
+                }
                 break;
         }
     }

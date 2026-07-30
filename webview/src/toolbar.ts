@@ -17,12 +17,13 @@ export interface ToolbarHandlers {
     setScale(scale: number): void;
     setLayout(layout: RenderSettings['layoutMode']): void;
     setStaveProfile(profile: RenderSettings['staveProfile']): void;
-    setSoundFont(uri: string): void;
+    setSoundFont(uri: string, label?: string): void;
     setTranspose(semitones: number): void;
     toggleAB(): void;
     toggleTrack(index: number, kind: 'mute' | 'solo', on: boolean): void;
     print(): void;
     exportMidi(): void;
+    importSoundFont?(): void;
 }
 
 export interface ToolbarState {
@@ -181,7 +182,16 @@ export class Toolbar {
 
         this.soundFontSelect = el('select', 'select');
         this.soundFontSelect.title = '音色库';
-        this.soundFontSelect.onchange = () => handlers.setSoundFont(this.soundFontSelect.value);
+        this.soundFontSelect.onchange = () => {
+            if (this.soundFontSelect.value === '__import__') {
+                handlers.importSoundFont?.();
+                // We don't have access to the old value immediately, but the host will send new settings shortly.
+                // Or user can manually re-select if they cancel.
+            } else {
+                const selectedOption = this.soundFontSelect.options[this.soundFontSelect.selectedIndex];
+                handlers.setSoundFont(this.soundFontSelect.value, selectedOption.dataset.label);
+            }
+        };
 
         audio.append(speed, metronome, countIn, volume, this.soundFontSelect);
 
@@ -286,10 +296,14 @@ export class Toolbar {
         for (const font of player.soundFonts) {
             const option = el('option', undefined, font.label);
             option.value = font.uri;
+            option.dataset.label = font.label;
             option.selected = font.uri === player.soundFontUri;
             this.soundFontSelect.append(option);
         }
-        this.soundFontSelect.hidden = player.soundFonts.length < 2;
+        const importOption = el('option', undefined, '导入音色库... (Import SoundFont)');
+        importOption.value = '__import__';
+        this.soundFontSelect.append(importOption);
+        this.soundFontSelect.hidden = false;
     }
 
     update(state: ToolbarState): void {
@@ -313,10 +327,10 @@ export class Toolbar {
 
         this.abButton.textContent = state.side === 'a' ? 'A' : 'B';
         this.abButton.classList.toggle('on', state.side === 'b');
-        this.abButton.disabled = !state.hasPartner;
+        this.abButton.disabled = false;
         this.abButton.title = state.hasPartner
             ? `对照 ${state.partnerName} (Alt+B)`
-            : '没有找到可对照的参照谱';
+            : '选择对照谱 (Alt+B)';
 
         this.renderSections(state.sections);
         this.renderTracks(state.tracks);

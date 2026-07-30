@@ -180,7 +180,8 @@ export interface StateMessage {
 /** webview 里的工具栏按钮触发的、需要宿主处理的动作。 */
 export interface CommandMessage {
     type: 'command';
-    command: 'runGate' | 'snapshot' | 'pickPartner' | 'openSettings';
+    command: 'runGate' | 'snapshot' | 'pickPartner' | 'openSettings' | 'importSoundFont' | 'print' | 'setDefaultSoundFont';
+    args?: any[];
 }
 
 export type WebviewToHost =

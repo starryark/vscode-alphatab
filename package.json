@@ -60,6 +60,16 @@
                 "command": "alphatab.snapshot",
                 "title": "%alphatab.snapshot%",
                 "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.importSoundFont",
+                "title": "Import SoundFont (导入音色库)",
+                "category": "alphaTab"
+            },
+            {
+                "command": "alphatab.print",
+                "title": "Print to PDF (打印)",
+                "category": "alphaTab"
             }
         ],
         "menus": {
