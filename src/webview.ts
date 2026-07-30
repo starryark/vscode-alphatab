@@ -49,21 +49,33 @@ export function openAlphatabPreview(context: vscode.ExtensionContext, uri?: vsco
     const setting = {
         staveProfile: 'default',
         core: {
-            tex: true
+            tex: true,
+            // alphaTab's render worker cannot importScripts the cross-origin
+            // vscode-webview:// script URL; render on the main thread instead.
+            useWorkers: false
         },
-        notation: { 
+        notation: {
             rhythmMode: 'showwithbars',
         },
         player: {
             enablePlayer: true,
-            soundFont: ''
+            soundFont: '',
+            // 1 = alphaTab.PlayerOutputMode.WebAudioScriptProcessor. The
+            // AudioWorklet loader fails inside the webview; ScriptProcessor works.
+            outputMode: 1
         }
     };
     const sf2Dir = getSoundDirUri(context, panel);
-    if (uri) {
-        const alphatex = fs.readFileSync(uri.fsPath, 'utf-8');        
-        debouncePostMessage(panel, { alphatex, setting, sf2Dir });
-    }
+    // Wait for the webview to finish loading alphaTab.min.js and signal 'ready'
+    // before sending the initial document. Otherwise the message can be posted
+    // before the webview has registered its message listener, leaving the
+    // preview blank.
+    panel.webview.onDidReceiveMessage(message => {
+        if (message && message.type === 'ready' && uri) {
+            const alphatex = fs.readFileSync(uri.fsPath, 'utf-8');
+            panel.webview.postMessage({ alphatex, setting, sf2Dir });
+        }
+    });
 
     vscode.workspace.onDidChangeTextDocument(e => {
         if (e.contentChanges.length > 0) {

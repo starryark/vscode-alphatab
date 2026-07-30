@@ -47,6 +47,23 @@ const alphaInstance = {
     sf2Dir: undefined
 }
 
+// alphaTab's synthesizer worker cannot importScripts the cross-origin
+// vscode-webview:// URL that loads alphaTab.min.js. Fetch the script on the
+// main thread and convert it to a same-origin blob URL for core.scriptFile.
+// Playback is disabled if this preparation fails.
+let alphaTabWorkerScriptUrl = null;
+async function prepareWorkerScript() {
+    try {
+        const scriptEl = document.querySelector('script[src*="alphaTab.min.js"]');
+        const resp = await fetch(scriptEl.src);
+        const code = await resp.text();
+        alphaTabWorkerScriptUrl = URL.createObjectURL(
+            new Blob([code], { type: 'application/javascript' }));
+    } catch (e) {
+        console.warn('alphaTab worker blob prep failed; playback disabled', e);
+    }
+}
+
 function play() {
     const inst = alphaInstance.at;
     if (inst) {
@@ -98,6 +115,19 @@ function simpleRender(alphatex, setting) {
     alphaInstance.setting = setting;
 
     setting = setting || defaultSetting;
+    setting.core = setting.core || {};
+    setting.player = setting.player || {};
+    // Render on the main thread: the render worker fails to load the
+    // cross-origin script URL.
+    setting.core.useWorkers = false;
+    if (alphaTabWorkerScriptUrl) {
+        // The synthesizer must still run in a worker; feed it the same-origin
+        // blob and use the ScriptProcessor audio path instead of AudioWorklet.
+        setting.core.scriptFile = alphaTabWorkerScriptUrl;
+        setting.player.outputMode = alphaTab.PlayerOutputMode.WebAudioScriptProcessor;
+    } else {
+        setting.player.enablePlayer = false;
+    }
     setting.staveProfile = alphaInstance.staveProfile;
     setting.player.soundFont = alphaInstance.sf2Dir + '/' + encodeURI(alphaInstance.guitar + '.sf2');
     console.log(setting.player.soundFont);
@@ -132,6 +162,11 @@ window.addEventListener('message', event => {
         simpleRender(alphatex, setting);
     }
 });
+
+// Once the message listener above is installed and the worker script blob is
+// ready, notify the extension that it can safely send the initial document.
+const vscodeApi = acquireVsCodeApi();
+prepareWorkerScript().finally(() => vscodeApi.postMessage({ type: 'ready' }));
 
 // simpleRender(`\\title "Gymnopédie No.1"
 // .
