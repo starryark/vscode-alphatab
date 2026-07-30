@@ -1,12 +1,10 @@
-# Alphatab 0.1.0 (fork)
+# VS Code AlphaTab (Enhanced Edition)
 
 ![](https://img.shields.io/badge/typescript-blue)
 ![](https://img.shields.io/badge/alphatab.js-org)
 
-> A fork of [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab).
-> The upstream extension fails inside modern VS Code with repeated `importScripts` NetworkErrors
-> and a blank preview. This fork fixes that and turns the preview into a working audition surface
-> for arranging: A/B compare, loop-a-phrase playback, and gate diagnostics in the Problems panel.
+> A powerful guitar tab and score previewer for VS Code. This fork of [LSTM-Kirigaya/vscode-alphatab](https://github.com/LSTM-Kirigaya/vscode-alphatab) turns the preview into a fully working audition surface for arranging, featuring A/B compare, loop-a-phrase playback, and gate diagnostics directly in the Problems panel.
+> *(It also fixes upstream issues where the extension fails inside modern VS Code with repeated `importScripts` NetworkErrors and a blank preview).*
 
 ## Features 🎸
 
@@ -40,23 +38,14 @@
 
 ## Demonstrations 🎥
 
-**Jump to tab**
-Demonstrates automatically jumping to alphatab text where the note is selected in the player.
-
-![Jump to tab](jump_tab.gif)
-
-**Change Speed**
-Demonstrates changing the playback speed in the player.
-
-![Change Speed](Change_Speed.gif)
-
-**Change Tab Format**
-Demonstrates changing the displayed format of the tab in the player.
-
-![Change Tab Format](Change_Tab_Format.gif)
+| Jump to tab | Change Speed | Change Tab Format |
+|---|---|---|
+| Automatically jump to the alphaTab text for any note you select in the player. | Easily adjust the playback speed to practice at your own pace. | Seamlessly switch between different tab formats directly from the player interface. |
+| ![Jump to tab](jump_tab.gif) | ![Change Speed](Change_Speed.gif) | ![Change Tab Format](Change_Tab_Format.gif) |
 
 **Export using Print Function**
-An example exported using the 'print' function: [alphatab-print-example.html](alphatab-print-example.html)
+An example exported using the 'print' function.
+**Note:** To view this demo, check out this [interactive preview](https://htmlpreview.github.io/?https://github.com/starryark/vscode-alphatab/blob/main/alphatab-print-example.html).
 
 ## Install 💻
 
