@@ -38,14 +38,24 @@
 
 ## Demonstrations 🎥
 
-| Jump to tab | Change Speed | Change Tab Format |
-|---|---|---|
-| Automatically jump to the alphaTab text for any note you select in the player. | Easily adjust the playback speed to practice at your own pace. | Seamlessly switch between different tab formats directly from the player interface. |
-| ![Jump to tab](jump_tab.gif) | ![Change Speed](Change_Speed.gif) | ![Change Tab Format](Change_Tab_Format.gif) |
+### Jump to tab
+Automatically jump to the alphaTab text for any note you select in the player.
 
-**Export using Print Function**
+![Jump to tab](jump_tab.gif)
+
+### Change Speed
+Easily adjust the playback speed to practice at your own pace.
+
+![Change Speed](Change_Speed.gif)
+
+### Change Tab Format
+Seamlessly switch between different tab formats directly from the player interface.
+
+![Change Tab Format](Change_Tab_Format.gif)
+
+### Export using Print Function
 An example exported using the 'print' function.
-**Note:** To view this demo, check out this [interactive preview](https://htmlpreview.github.io/?https://github.com/starryark/vscode-alphatab/blob/main/alphatab-print-example.html).
+[View the exported PDF](alphatab-print-example.pdf)
 
 ## Install 💻
 
